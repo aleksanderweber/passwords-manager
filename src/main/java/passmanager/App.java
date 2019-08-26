@@ -5,8 +5,6 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.toList;
-
 public class App {
 
     static Scanner sc = new Scanner(System.in);
@@ -49,8 +47,13 @@ public class App {
         String siteName = sc.nextLine();
         System.out.println("Podaj login:");
         String login = sc.nextLine();
-        System.out.println("Podaj hasło:");
+        System.out.println("Podaj hasło: (Jeśli chcesz wygenerować losowe hasło wybierz 9)");
         String passwordEncrypted = sc.nextLine();
+        if (passwordEncrypted.equals("9")) {
+            PasswordMedium pm = new PasswordMedium();
+            passwordEncrypted = pm.generate();
+            System.out.println(passwordEncrypted);
+        }
         System.out.println("Podaj opis");
         String description = sc.nextLine();
         PasswordEntry passwordEntry = new PasswordEntry(0, passwordEncrypted, siteName, login, description);
@@ -66,8 +69,13 @@ public class App {
     public static void updatePasswordEntry() {
         System.out.println("Podaj nazwę strony:");
         String siteName = sc.nextLine();
-        System.out.println("Podaj nowe hasło");
+        System.out.println("Podaj nowe hasło: (Jeśli chcesz wygenerować losowe hasło wybierz 9)");
         String newPassword = sc.nextLine();
+        if (newPassword.equals("9")) {
+            PasswordMedium pm = new PasswordMedium();
+            newPassword = pm.generate();
+            System.out.println(newPassword);
+        }
         passwordEntryMap.get(siteName).setPasswordEncrypted(newPassword);
     }
 
