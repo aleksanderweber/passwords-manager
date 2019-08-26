@@ -15,6 +15,7 @@ import static java.util.stream.Collectors.toList;
 public class FileManager {
 
     public static void saveToFile(List<PasswordEntry> passwordEntries) throws IOException {
+
         CSVWriter writer = new CSVWriter(
                 new FileWriter("passwords.csv"),
                 ';',
