@@ -22,7 +22,8 @@ public class App {
                 .collect(Collectors.toMap(PasswordEntry::getSiteName, Function.identity()));
 
         while (true) {
-            System.out.println("Co chcesz zrobić?\n1. Dodaj nowe hasło.\n2. Odczytaj hasło.\n3. Zaktualizuj hasło.\n4. Usuń hasło.\n 0. Wyjdź");
+            System.out.println("Co chcesz zrobić?\n1. Dodaj nowe hasło.\n2. Odczytaj hasło.\n3. Zaktualizuj hasło." +
+                    "\n4. Usuń hasło.\n5. Wyświetl strony.\n0. Wyjdź");
             String input = sc.nextLine();
             if (input.equals("1")) {
                 addPasswordEntry();
@@ -32,7 +33,10 @@ public class App {
                 updatePasswordEntry();
             } else if (input.equals("4")) {
                 deletePasswordEntry();
+            }else if (input.equals("5")) {
+                showAll();
             } else if (input.equals("0") || input.equalsIgnoreCase("exit")) {
+                saveBeforeExit();
                 System.exit(0);
             } else {
                 System.out.println("Niepoprawny wybór");
@@ -71,6 +75,18 @@ public class App {
         System.out.println("Podaj nazwę strony:");
         String siteName = sc.nextLine();
         passwordEntryMap.remove(siteName);
+    }
+
+    public static void showAll() {
+        for (String keys : passwordEntryMap.keySet())
+        {
+            System.out.println(keys);
+        }
+    }
+
+    public static void saveBeforeExit() throws IOException {
+        List<PasswordEntry> listToSave = new ArrayList<>(passwordEntryMap.values());
+        FileManager.saveToFile(listToSave);
     }
 
 }
