@@ -1,14 +1,14 @@
 package passmanager;
 
+import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
 import com.opencsv.CSVWriter;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -31,24 +31,30 @@ public class FileManager {
         writer.close();
     }
 
-//    public static List<PasswordEntry> readFromFile() throws FileNotFoundException {
-//        CSVReader reader = new CSVReader(
-//                new FileReader("passwords.csv"),
-//
-//        );
-//
-//    }
+    public static List<PasswordEntry> readFromFile() throws IOException {
+        CSVParserBuilder parserBuilder = new CSVParserBuilder()
+                .withEscapeChar('\\')
+                .withIgnoreLeadingWhiteSpace(true)
+                .withQuoteChar('"')
+                .withSeparator(';');
+
+        CSVReaderBuilder readerBuilder = new CSVReaderBuilder(new FileReader("passwords.csv")).withCSVParser(parserBuilder.build());
+        CSVReader reader = readerBuilder.build();
+        return reader.readAll().stream()
+                .map(FileManager::arrayToPasswordEntry)
+                .collect(Collectors.toList());
+    }
 
     public static String[] passwordEntryToArray(PasswordEntry passwordEntry) {
         return new String[]{
-          String.valueOf(passwordEntry.getId()),
-          passwordEntry.getPasswordEncrypted(),
-          passwordEntry.getSiteName(),
-          passwordEntry.getLogin(),
-          passwordEntry.getDescription()};
+                String.valueOf(passwordEntry.getId()),
+                passwordEntry.getPasswordEncrypted(),
+                passwordEntry.getSiteName(),
+                passwordEntry.getLogin(),
+                passwordEntry.getDescription()};
     }
 
-    public static PasswordEntry arrayToPasswordEntry(String[] row){
+    public static PasswordEntry arrayToPasswordEntry(String[] row) {
         int id = Integer.parseInt(row[0]);
         String passwordEncrypted = row[1];
         String siteName = row[2];
@@ -56,6 +62,5 @@ public class FileManager {
         String description = row[4];
         return new PasswordEntry(id, passwordEncrypted, siteName, login, description);
     }
-
 
 }
