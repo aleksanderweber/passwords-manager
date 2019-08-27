@@ -50,14 +50,37 @@ public class App {
         System.out.println("Podaj hasło: (Jeśli chcesz wygenerować losowe hasło wybierz 9)");
         String passwordEncrypted = sc.nextLine();
         if (passwordEncrypted.equals("9")) {
-            PasswordMedium pm = new PasswordMedium();
-            passwordEncrypted = pm.generate();
-            System.out.println(passwordEncrypted);
+            passwordEncrypted = passwordgenerate();
         }
         System.out.println("Podaj opis");
         String description = sc.nextLine();
         PasswordEntry passwordEntry = new PasswordEntry(0, passwordEncrypted, siteName, login, description);
         passwordEntryMap.put(siteName,passwordEntry);
+    }
+
+    public static String passwordgenerate () {
+
+        while (true) {
+            System.out.println("Wybierz moc hasła: \n1. Słabe\n2. Średnie \n3. Silne");
+            String choice = sc.nextLine();
+            String passwordEncrypted;
+            if (choice.equals("1")) {
+                PasswordWeak pw = new PasswordWeak();
+                passwordEncrypted = pw.generate();
+                return passwordEncrypted;
+            } else if (choice.equals("2")) {
+                PasswordMedium pm = new PasswordMedium();
+                passwordEncrypted = pm.generate();
+                return passwordEncrypted;
+            } else if (choice.equals("3")) {
+                PasswordStrong ps = new PasswordStrong();
+                passwordEncrypted = ps.generate();
+                return passwordEncrypted;
+            } else {
+                System.out.println("Niepoprawny wybór");
+            }
+        }
+
     }
 
     public static void readPasswordEntry() {
